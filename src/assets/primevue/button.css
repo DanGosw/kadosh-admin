@@ -18,7 +18,7 @@
 }
 
 .p-button-icon-only {
-    @apply w-10 py-1 px-0 gap-0
+    @apply w-8 py-1 px-0 gap-0
 }
 
 .p-button-icon-only .p-button-rounded {

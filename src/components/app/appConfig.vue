@@ -4,7 +4,7 @@ import { useCookies } from "@vueuse/integrations/useCookies";
 import { useDark } from "@vueuse/core";
 import Drawer from "primevue/drawer";
 
-const selectedPrimary = ref<{ type: string; name: string, palette: [] }>({ type: "primary", name: "sky", palette: [] });
+const selectedPrimary = ref<{ type: string; name: string, palette: [] }>({ type: "primary", name: "indigo", palette: [] });
 const selectedSurface = ref<{ type: string; name: string, palette: [] }>({ type: "surface", name: "slate", palette: [] });
 const scales = ref<number[]>([ 12, 13, 14, 15, 16, 17, 18 ]);
 const visible = ref<boolean>(false);

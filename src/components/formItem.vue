@@ -15,7 +15,7 @@ const props = defineProps({
 <template>
     <div :class="colsPro ? colsPro : `max-cols-${cols}`">
         <label :for="props.forLabel" class="label-size" v-if="!hideLabel">
-            <span> {{ props.label }} </span>
+            {{ props.label }}
             <span class="ml-1 text-red-500" v-if="props.mark">*</span>
         </label>
         <slot/>

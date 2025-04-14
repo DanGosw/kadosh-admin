@@ -67,7 +67,7 @@ const handleNavigation = (route: string | { name: string }): void => {
 
         <template #end>
             <div class="flex space-x-1">
-                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="router.push({ name: 'login' })">
+                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="router.push({ name: 'login' })" v-tooltip.bottom="'Cerrar Sesión'">
                     <template #icon>
                         <i-material-symbols-person-outline-rounded/>
                     </template>

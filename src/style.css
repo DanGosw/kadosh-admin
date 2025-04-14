@@ -120,6 +120,10 @@
     @apply mt-4 flex items-center justify-center space-x-1;
 }
 
+.align-buttons-card-footer {
+    @apply flex items-center justify-end space-x-1;
+}
+
 .max-cols-1 {
     @apply col-span-1 md:col-span-1;
 }

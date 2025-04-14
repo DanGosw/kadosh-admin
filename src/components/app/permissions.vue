@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, type Ref, ref } from "vue";
 import { type RouteRecordRaw } from "vue-router";
-import router from "@/routes";
+import router from "@/router";
 import { type TreeSelectionKeys } from "primevue";
 
 // Interfaces for injected permissions and tree option
