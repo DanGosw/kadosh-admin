@@ -126,3 +126,11 @@ input.p-select-label {
 .p-select-fluid {
     @apply flex
 }
+
+.p-select-sm {
+    @apply text-sm px-[0.625rem] py-[0.275rem]
+}
+
+.p-select-lg {
+    @apply text-lg px-[0.655rem] py-[0.210rem]
+}

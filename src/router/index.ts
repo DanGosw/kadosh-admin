@@ -11,7 +11,7 @@ const router = createRouter({
                     meta: { label: "Nueva Inscripción", icon: IconSolarClipboardAddBold }
                 },
                 {
-                    path: "/inscriptions", name: "inscriptions", component: () => import("../views/AboutView.vue"),
+                    path: "/inscriptions", name: "inscriptions", component: () => import("@/modules/inscriptions/inscriptions.vue"),
                     meta: {
                         label: "Inscripciones", icon: IconTablerClipboardDataFilled,
                         permissions: [
@@ -38,7 +38,8 @@ const router = createRouter({
                     }
                 }
             ]
-        }
+        },
+        { path: "/:catchAll(.*)", name: "Page not found", redirect: "/" }
     ]
 });
 

@@ -2,10 +2,12 @@
 
 import { ref } from "vue";
 import { useMembersStore } from "@/stores/storeMembers.ts";
+import Drawer from "primevue/drawer";
 
 const visibleDrawer = ref(false);
 const membersStoreOptions = useMembersStore();
 
+defineEmits([ "onClickCard" ]);
 defineExpose({ visibleDrawer });
 
 </script>
@@ -18,18 +20,18 @@ defineExpose({ visibleDrawer });
                     Lista de Personas
                 </p>
                 <p class="p-card-subtitle">
-                    Persona(s) registradas
+                    {{ membersStoreOptions.membersData.length }} Persona(s) registradas
                 </p>
             </div>
         </template>
         <div class="grid space-y-2">
             <cards-info-member v-for="data in  membersStoreOptions.membersData" :key="data.dni" :birthdate="data.birthdate" :dni="data.dni"
                                :church="data.church" :doc-type="data.docType" :gender="data.gender" :is-member="data.isMember"
-                               :names="data.names" :lastnames="data.lastnames" :phone="data.phone"/>
+                               :names="data.names" :lastnames="data.lastnames" :phone="data.phone" @click="$emit('onClickCard', (data))"/>
         </div>
         <template #footer>
             <div class="align-buttons-card-footer">
-                <Button label="Agregar otro" severity="secondary">
+                <Button label="Agregar otro" severity="secondary" @click="visibleDrawer = false">
                     <template #icon>
                         <i-material-symbols-list-alt-add/>
                     </template>

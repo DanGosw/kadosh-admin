@@ -33,7 +33,7 @@ const formattedBirthdate = computed(() => {
                 <i-material-symbols-id-card-outline-rounded class="text-base"/>
                 <span>{{ props.dni }}</span>
             </div>
-            <Button v-tooltip.left="'Eliminar de la lista'" text severity="danger" @click="membersStoreOptions.removeMembers(props)">
+            <Button v-tooltip.left="'Eliminar de la lista'" size="small" severity="danger" @click="membersStoreOptions.removeMembers(props)">
                 <template #icon>
                     <i-material-symbols-delete-outline-rounded class="text-lg"/>
                 </template>
@@ -48,9 +48,9 @@ const formattedBirthdate = computed(() => {
         <!-- Género y Fecha -->
         <div class="flex justify-between items-center mt-1 text-sm">
             <div class="flex items-center gap-1 text-primary-500">
-                <i-material-symbols-male-rounded class="text-base" v-if="props.gender === 'MASCULINO'"/>
+                <i-material-symbols-male-rounded class="text-base" v-if="props.gender === 'M'"/>
                 <i-material-symbols-female-rounded class="text-base" v-else/>
-                <span class="text-surface-700 dark:text-surface-200">{{ props.gender }}</span>
+                <span class="text-surface-700 dark:text-surface-200">{{ props.gender === "M" ? "MASCULINO" : "FEMENINO" }}</span>
             </div>
             <div class="flex items-center gap-1 text-gray-500 dark:text-gray-300">
                 <i-material-symbols-calendar-month-outline-rounded class="text-base"/>
