@@ -27,7 +27,8 @@ defineExpose({ visibleDrawer });
         <div class="grid space-y-2">
             <cards-info-member v-for="data in  membersStoreOptions.membersData" :key="data.dni" :birthdate="data.birthdate" :dni="data.dni"
                                :church="data.church" :doc-type="data.docType" :gender="data.gender" :is-member="data.isMember"
-                               :names="data.names" :lastnames="data.lastnames" :phone="data.phone" @click="$emit('onClickCard', (data))"/>
+                               :voucher-image="data.voucherImage" :names="data.names" :lastnames="data.lastnames" :phone="data.phone"
+                               @click="$emit('onClickCard', (data))"/>
         </div>
         <template #footer>
             <div class="align-buttons-card-footer">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InterfaceMembers } from "@/composables/interfaceMembers";
-import { computed } from "vue";
 import { useMembersStore } from "@/stores/storeMembers.ts";
+import { isValid, parseISO } from "date-fns";
 
 const membersStoreOptions = useMembersStore();
 
@@ -10,18 +10,17 @@ const props = withDefaults(defineProps<InterfaceMembers>(), {
     names: "",
     lastnames: "",
     gender: "",
-    birthdate: undefined,
+    birthdate: null,
     phone: "",
     isMember: "",
     church: "",
     docType: ""
 });
 
-const formattedBirthdate = computed(() => {
-    if ( !props.birthdate) return "";
-    const date = new Date(props.birthdate);
-    return date.toISOString().split("T")[0]; // yyyy-MM-dd
-});
+const convertDate = (data: Date | Date[] | (Date | null)[] | null | string) => {
+    const parsedDate = typeof data === "string" ? parseISO(data) : null;
+    return { birthdate: parsedDate && isValid(parsedDate) ? parsedDate : null };
+};
 
 </script>
 
@@ -33,7 +32,8 @@ const formattedBirthdate = computed(() => {
                 <i-material-symbols-id-card-outline-rounded class="text-base"/>
                 <span>{{ props.dni }}</span>
             </div>
-            <Button v-tooltip.left="'Eliminar de la lista'" size="small" severity="danger" @click="membersStoreOptions.removeMembers(props)">
+            <Button v-tooltip.left="'Eliminar de la lista'" size="small" severity="danger"
+                    @click="membersStoreOptions.removeMembers(props)">
                 <template #icon>
                     <i-material-symbols-delete-outline-rounded class="text-lg"/>
                 </template>
@@ -54,7 +54,7 @@ const formattedBirthdate = computed(() => {
             </div>
             <div class="flex items-center gap-1 text-gray-500 dark:text-gray-300">
                 <i-material-symbols-calendar-month-outline-rounded class="text-base"/>
-                <span>{{ formattedBirthdate }}</span>
+                <span>{{ convertDate(props.birthdate).birthdate }}</span>
             </div>
         </div>
 
