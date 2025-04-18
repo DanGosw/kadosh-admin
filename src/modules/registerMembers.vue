@@ -76,8 +76,8 @@ const saveNewMember = handleSubmit((values) => {
 });
 
 const onClickCardMember = (data: InterfaceMembers) => {
-    const parsedDate = typeof data.birthdate === "string" ? parseISO(data.birthdate) : null;
-    setValues({ ...data, birthdate: parsedDate && isValid(parsedDate) ? parsedDate : null });
+    const parsedDate = typeof data.birthdate === "string" ? parseISO(data.birthdate) : data.birthdate;
+    setValues({ ...data, birthdate: parsedDate && isValid(parsedDate) ? parsedDate : data.birthdate });
     isClickCard.value = true;
 };
 
