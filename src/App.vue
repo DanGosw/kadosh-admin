@@ -42,6 +42,6 @@ onMounted(async() => {
     </div>
     <div v-else>
         <router-view/>
-        <Toast/>
+        <Toast position="top-left"/>
     </div>
 </template>

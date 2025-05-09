@@ -57,7 +57,7 @@ const optionsDocuments = computed(() => storeDocumentType().documentType);
 const optionsChurches = computed(() => storeChurches().churches);
 const optionsKinds = computed(() => storeKind().kind);
 
-const addDataFromReniec = async() => {
+const addDataFromReniec = async(): Promise<void> => {
     loadingSearch.value = true;
     wasDniChecked.value = false;
     const dataConsult = await getDataReniec(doc_num.value);
@@ -79,7 +79,7 @@ const addDataFromReniec = async() => {
     loadingSearch.value = false;
 };
 
-const saveNewMember = handleSubmit(async(values) => {
+const saveNewMember = handleSubmit(async(values): Promise<void> => {
     if (props.formData?.id) {
         const parsedDate = typeof values.birthdate === "string" ? parseISO(values.birthdate) : values.birthdate;
         const { response }: UsersActiosMembers = await Api.Put({
@@ -90,6 +90,7 @@ const saveNewMember = handleSubmit(async(values) => {
             props.closeModal();
             await props.refreshData();
             toastEvent({ severity: "success", summary: `Miembro ${ response.data.names } ${ response.data.lastnames } editado.` });
+            updateVisibilityDrawer();
         }
     } else {
         if (documenttype.value === 1 && !wasDniChecked.value && !isClickCard.value) {
@@ -112,10 +113,7 @@ const onClickCardMember = (data: InterfaceMembers) => {
     isClickCard.value = true;
 };
 
-const clearDataForm = () => {
-    handleReset();
-};
-
+const clearDataForm = () => handleReset();
 const updateVisibilityDrawer = () => refDrawerMembersSaved.value.visibleDrawer = true;
 
 watch(doc_num, () => {
@@ -139,7 +137,7 @@ onMounted(() => {
                     optionLabel="description"
                     option-value="id" size="large" :disabled="isClickCard"/>
         </FormItem>
-        <FormItem label="DNI" cols="12">
+        <FormItem label="DNI" cols="12" :error="errors.doc_num">
             <InputGroup>
                 <InputText fluid v-model="doc_num" @blur="doc_numHandle($event, true)" placeholder="Ingrese nro de DNI" v-key-filter.num
                            maxlength="8" :invalid="!!errors.doc_num" size="large"
@@ -153,15 +151,15 @@ onMounted(() => {
                 </Button>
             </InputGroup>
         </FormItem>
-        <FormItem label="Nombres" cols="12">
+        <FormItem label="Nombres" cols="12" :error="errors.names">
             <InputText fluid v-model="names" @blur="namesHandle($event, true)" :invalid="!!errors.names" size="large"
                        :disabled="!wasDniChecked && !isClickCard  && documenttype === 1 && !props.formData?.id"/>
         </FormItem>
-        <FormItem label="Apellidos" cols="12">
+        <FormItem label="Apellidos" cols="12" :error="errors.lastnames">
             <InputText fluid v-model="lastnames" @blur="lastnamesHandle($event, true)" :invalid="!!errors.lastnames" size="large"
                        :disabled="!wasDniChecked && !isClickCard  && documenttype === 1 && !props.formData?.id"/>
         </FormItem>
-        <FormItem label="Género" cols="12">
+        <FormItem label="Género" cols="12" :error="errors.gender">
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
                     <RadioButton v-model="gender" inputId="gender1" name="gender" value="M" @blur="genderHandle($event, true)"
@@ -175,15 +173,15 @@ onMounted(() => {
                 </div>
             </div>
         </FormItem>
-        <FormItem label="F. de Nacimiento" cols="12">
+        <FormItem label="F. de Nacimiento" cols="12" :error="errors.gender">
             <DatePicker fluid v-model="birthdate" @blur="birthdateHandle(undefined, true)" :invalid="!!errors.birthdate" size="large"
                         date-format="d/m/yy"/>
         </FormItem>
-        <FormItem label="Celular" cols="12">
+        <FormItem label="Celular" cols="12" :error="errors.birthdate">
             <InputText fluid v-model="phone" @blur="phoneHandle($event, true)" maxlength="9" v-key-filter.num :invalid="!!errors.phone"
                        size="large"/>
         </FormItem>
-        <FormItem label="¿Perteneces a alguna iglesia?" cols="12">
+        <FormItem label="¿Perteneces a alguna iglesia?" cols="12" :error="errors.phone">
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2" v-for="kindData in optionsKinds">
                     <RadioButton v-model="kind" :inputId="kindData.description" :name="kindData.description" :value="kindData.id"
@@ -193,9 +191,10 @@ onMounted(() => {
                 </div>
             </div>
         </FormItem>
-        <FormItem label="Iglesia" cols="12">
+        <FormItem label="Iglesia" cols="12" :error="errors.kind">
             <Select :options="optionsChurches" fluid v-model="church" @blur="churchHandle($event, true)" filter show-clear size="large"
-                    :invalid="!!errors.church" reset-filter-on-clear reset-filter-on-hide optionLabel="description" option-value="id"/>
+                    :invalid="!!errors.church" reset-filter-on-clear reset-filter-on-hide auto-filter-focus optionLabel="description"
+                    option-value="id"/>
         </FormItem>
 
         <div class="max-cols-4">
