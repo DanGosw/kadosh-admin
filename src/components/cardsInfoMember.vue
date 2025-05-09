@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InterfaceMembers } from "@/composables/interfaceMembers";
 import { useMembersStore } from "@/stores/storeMembers.ts";
-import { isValid, parseISO } from "date-fns";
+import { isValid, parseISO, format } from "date-fns";
 
 const membersStoreOptions = useMembersStore();
 
@@ -17,9 +17,16 @@ const props = withDefaults(defineProps<InterfaceMembers>(), {
     docType: ""
 });
 
-const convertDate = (data: Date | Date[] | (Date | null)[] | null | string) => {
-    const parsedDate = typeof data === "string" ? parseISO(data) : null;
-    return { birthdate: parsedDate && isValid(parsedDate) ? parsedDate : null };
+const convertDate = (data: Date | Date[] | (Date | null)[] | null | string | undefined) => {
+    let date: Date | null = null;
+
+    if (typeof data === "string") {
+        const parsed = parseISO(data);
+        date = isValid(parsed) ? parsed : null;
+    } else if (data instanceof Date) {
+        date = isValid(data) ? data : null;
+    }
+    return date ? format(date, "dd-MM-yyyy") : null;
 };
 
 </script>
@@ -54,7 +61,7 @@ const convertDate = (data: Date | Date[] | (Date | null)[] | null | string) => {
             </div>
             <div class="flex items-center gap-1 text-gray-500 dark:text-gray-300">
                 <i-material-symbols-calendar-month-outline-rounded class="text-base"/>
-                <span>{{ convertDate(props.birthdate).birthdate }}</span>
+                <span>{{ convertDate(props.birthdate) }}</span>
             </div>
         </div>
 
