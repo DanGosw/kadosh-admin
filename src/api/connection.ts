@@ -3,7 +3,7 @@ import axios, { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig 
 import { type ErrorResponse } from "@/api/errorResponse";
 import { useUserDataConfigStore } from "@/stores/loginStore/storeUserData";
 
-let baseURL: string = import.meta.env.VITE_TS_VUE_API;
+let baseURL: string = import.meta.env.VITE_API_APP_URL;
 let has_server_connection: boolean = true;
 
 const axiosInstance = axios.create({ baseURL });

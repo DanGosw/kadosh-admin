@@ -6,76 +6,20 @@ export interface InterfaceLogin {
 }
 
 export interface User {
-    id: number;
-    names: string;
-    username: string;
-    dni: string;
-    address: string;
-    telephone: string;
-    email: string;
-    jobStart: string;
-    observation: string;
-    permission: Permission[];
-    defaultSaleReceipt: string;
-    active: boolean;
-    fk_profile: FkProfile;
-    fk_branch: FkBranch;
-    user_series: Series[];
-}
-
-export interface Permission {
-    name: string;
-    children: Children[];
-}
-
-export interface Children {
-    name: string;
-    permissions?: string[];
-}
-
-export interface FkProfile {
-    description: string;
-    permission: Permission2[];
-    active: boolean;
-    id: number;
-}
-
-export interface Permission2 {
-    name: string;
-    children: Children2[];
-}
-
-export interface Children2 {
-    name: string;
-}
-
-export interface FkBranch {
-    id: number;
-    fk_company: FkCompany;
-    description: string;
-}
-
-export interface FkCompany {
-    id: number;
-    denomination: string;
-}
-
-export interface Series {
-    id: number;
-    serie: number;
-    fk_serie: FkSerie;
-}
-
-export interface FkSerie {
-    id: number;
-    fk_invoiceType: FkInvoiceType;
-    description: string;
-    active: boolean;
-}
-
-export interface FkInvoiceType {
-    id: string;
-    description: string;
+    id: number
+    password: string
+    last_login: string
+    is_superuser: boolean
+    username: string
+    names: any
+    email: string
+    lastname: any
+    gender: string
+    is_staff: boolean
+    is_active: boolean
+    profile: any
+    groups: any[]
+    user_permissions: any[]
 }
 
 export type InterfaceUserLoginActions = InterfaceAxiosApiResponse<InterfaceLogin> 

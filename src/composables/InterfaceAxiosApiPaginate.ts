@@ -14,7 +14,7 @@ export interface Response<T> {
 }
 
 export interface Data<T> {
-    total: number;
+    count: number;
     size: number;
     page: number;
     results: T[];
