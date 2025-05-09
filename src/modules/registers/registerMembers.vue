@@ -90,7 +90,6 @@ const saveNewMember = handleSubmit(async(values): Promise<void> => {
             props.closeModal();
             await props.refreshData();
             toastEvent({ severity: "success", summary: `Miembro ${ response.data.names } ${ response.data.lastnames } editado.` });
-            updateVisibilityDrawer();
         }
     } else {
         if (documenttype.value === 1 && !wasDniChecked.value && !isClickCard.value) {
@@ -100,6 +99,7 @@ const saveNewMember = handleSubmit(async(values): Promise<void> => {
 
         if ( !props.formData?.id) {
             membersStoreOptions.addNewMembers(values, clearDataForm, isClickCard.value);
+            updateVisibilityDrawer();
         }
         isClickCard.value = false;
     }
@@ -206,7 +206,7 @@ onMounted(() => {
             </Button>
         </div>
         <div class="max-cols-4">
-            <Button label="Cancelar" severity="warn" fluid @click="clearDataForm()">
+            <Button label="Limpiar" severity="warn" fluid @click="clearDataForm()">
                 <template #icon>
                     <i-material-symbols-tab-close/>
                 </template>

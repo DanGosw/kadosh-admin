@@ -4,9 +4,11 @@ import { computed } from "vue";
 import AppConfig from "@/components/app/appConfig.vue";
 import { optionsMenuStore } from "@/stores/optionsMenu";
 import type { MenuItem } from "primevue/menuitem";
+import { useUserDataConfigStore } from "@/stores/loginStore/storeUserData.ts";
 
 const route = useRoute();
 const router = useRouter();
+const userDataStore = useUserDataConfigStore();
 
 optionsMenuStore.createOptionsMenu();
 
@@ -40,7 +42,7 @@ const handleNavigation = (route: string | { name: string }): void => {
     <Menubar :model="menuOptions" class="text-[12px]" breakpoint="840px">
         <template #start>
             <div class="mr-1 flex h-9 w-14 items-center justify-center rounded-md">
-                <i-noto-turtle class="h-full w-auto"/>
+                <img src="../../public/kadosh.png" class="h-8" alt="logo">
             </div>
         </template>
         <template #item="{ item, props }">
@@ -67,7 +69,8 @@ const handleNavigation = (route: string | { name: string }): void => {
 
         <template #end>
             <div class="flex space-x-1">
-                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="router.push({ name: 'login' })" v-tooltip.bottom="'Cerrar Sesión'">
+                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="userDataStore.logout()"
+                        v-tooltip.bottom="'Cerrar Sesión'">
                     <template #icon>
                         <i-material-symbols-person-outline-rounded/>
                     </template>

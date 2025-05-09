@@ -180,7 +180,7 @@ defineExpose({ loadInscriptionsList });
                     <Button size="small" severity="info" v-tooltip.top="'Cambiar monto'" @click="onChangeAmount(data)"
                             class="h-6 !w-6">
                         <template #icon>
-                            <i-material-symbols-lock/>
+                            <i-ic-round-attach-money/>
                         </template>
                     </Button>
                 </div>

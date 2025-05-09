@@ -3,6 +3,7 @@
 interface RateSelectedPayload {
     idRate: number;
     priceRate: string;
+    nameRate: string;
 }
 
 const emit = defineEmits<{
@@ -19,7 +20,8 @@ const props = defineProps({
 function rateClicked() {
     emit("on-rate-selected", {
         idRate: props.idRate,
-        priceRate: props.priceRate
+        priceRate: props.priceRate,
+        nameRate: props.nameRate
     });
 }
 

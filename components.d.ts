@@ -27,6 +27,7 @@ declare module 'vue' {
     IFluentPeopleAdd16Filled: typeof import('~icons/fluent/people-add16-filled')['default']
     IIcBaselinePayments: typeof import('~icons/ic/baseline-payments')['default']
     IIcBaselineTextIncrease: typeof import('~icons/ic/baseline-text-increase')['default']
+    IIcRoundAttachMoney: typeof import('~icons/ic/round-attach-money')['default']
     IIcRoundDarkMode: typeof import('~icons/ic/round-dark-mode')['default']
     IIcRoundLightMode: typeof import('~icons/ic/round-light-mode')['default']
     IIcTwotoneTextDecrease: typeof import('~icons/ic/twotone-text-decrease')['default']

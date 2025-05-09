@@ -28,20 +28,22 @@ const usePaymentMethodStore = storePaymentMethod();
 const useStoreTotalRate = storePriceRate();
 const useStoreActivities = storeActivities();
 const useStoreRates = storeRate();
+const labelRateSelected = ref("");
 
 const validationSchema = ref(yup.object({
     paymentmethod: yup.number().required("Seleccione el método de pago"),
     // activity: yup.number().required("Seleccione una actividad"),
     tarifa: yup.number().required("Seleccione una tarifa"),
-    voucheramount: yup.number().required("Requerido"),
+    voucheramount: yup.number().min(1, "Agregue un valor valido").required("Requerido"),
     voucherfile: yup.object().shape({
         file: yup.mixed().required("Img. requerida"), objectURL: yup.string().required("Img. requerida")
     }).nullable()
 }));
 
-const { handleSubmit, errors, resetForm } = useForm<{ voucherfile: VoucherImageType | {}, paymentmethod: null | number, tarifa: number }>({
-    validationSchema, initialValues: { voucherfile: {}, paymentmethod: null }
-});
+const { handleSubmit, errors, resetForm } =
+    useForm<{ voucheramount: null, voucherfile: VoucherImageType | {}, paymentmethod: null | number, tarifa: number }>({
+        validationSchema, initialValues: { voucherfile: {}, paymentmethod: null }
+    });
 
 const { value: voucherfile, setValue: setVoucherImage } = useField<VoucherImageType | {}>("voucherfile");
 const { value: paymentmethod } = useField<number | null>("paymentmethod");
@@ -87,7 +89,7 @@ const saveAllMembers = handleSubmit(async() => {
         if (response && response?.status === 201) {
             toastEvent({ severity: "success", summary: `${ response.data.message }` });
             storeDataMembers.membersData = [];
-            await router.push({ name: "newRegister" });
+            await router.push({ name: "newRegister", force: true });
             refVoucherImage.value.remove();
             resetForm();
             loadingSave.value = false;
@@ -108,8 +110,9 @@ const filterPaymentMethods = computed(() => {
     return usePaymentMethodStore.paymentMethod.filter(pm => pm.id !== 1 && pm.description !== "EFECTIVO" && pm.active);
 });
 
-const onSelected = (payload: { idRate: number, priceRate: string }) => {
+const onSelected = (payload: { idRate: number, priceRate: string, nameRate: string }) => {
     setRate(payload.idRate);
+    labelRateSelected.value = payload.nameRate;
     setVoucheramount(parseFloat(payload.priceRate));
 };
 
@@ -145,6 +148,9 @@ const onValueSelectPayment = (id: number) => {
                                    :id-rate-selected="tarifa" :price-rate="act.price" @on-rate-selected="onSelected"/>
                     </div>
                 </FormItem>
+                <FormItem cols="12" :error="errors.voucheramount" label="Monto a pagar" v-if="labelRateSelected === 'OTRO MONTO'">
+                    <InputNumber v-model="voucheramount" :min="1" prefix="S/" fluid size="large"/>
+                </FormItem>
                 <FormItem label="Voucher de pago" cols="12" :error="errors.voucherfile">
                     <FileUpload name="voucher" :accept="fileAccept" :max-file-size="1000000" :file-limit="1" class="w-full"
                                 ref="refVoucherImage" @select="(files:FileUploadSelectEvent)=> setVoucherImageFile(files.files[0])"
@@ -160,7 +166,6 @@ const onValueSelectPayment = (id: number) => {
                 <div class="mb-4 rounded-md bg-slate-400 p-4 text-center text-2xl font-bold max-cols-12">
                     Total S/ {{ useStoreTotalRate.calculateRate(voucheramount) }}
                 </div>
-
                 <div class="max-cols-4">
                     <Button label="Ver Lista" severity="secondary" @click="updateVisibilityDrawer"
                             v-if="storeDataMembers.membersData.length >= 1" fluid>
