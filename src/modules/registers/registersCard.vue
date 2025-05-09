@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import RegisterMembers from "@/modules/registerMembers.vue";
+import RegisterMembers from "@/modules/registers/registerMembers.vue";
 </script>
 
 <template>

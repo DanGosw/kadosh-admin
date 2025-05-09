@@ -1,59 +1,55 @@
 <script setup lang="ts">
 import type { InterfaceMembers } from "@/composables/interfaceMembers";
 import { useMembersStore } from "@/stores/storeMembers.ts";
-import { isValid, parseISO, format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
+import { storeChurches, storeKind } from "../stores/generalInfoStore.ts";
 
 const membersStoreOptions = useMembersStore();
 
 const props = withDefaults(defineProps<InterfaceMembers>(), {
-    dni: "",
+    doc_num: "",
     names: "",
     lastnames: "",
     gender: "",
-    birthdate: null,
+    birthdate: '',
     phone: "",
-    isMember: "",
-    church: "",
-    docType: ""
+    kind: null,
+    church: null,
+    docType: null
 });
 
-const convertDate = (data: Date | Date[] | (Date | null)[] | null | string | undefined) => {
-    let date: Date | null = null;
+const convertDate = (data: string | Date | Date[] | (Date | null)[] | null) => {
+    if ( !data) return { birthdate: null };
 
-    if (typeof data === "string") {
-        const parsed = parseISO(data);
-        date = isValid(parsed) ? parsed : null;
-    } else if (data instanceof Date) {
-        date = isValid(data) ? data : null;
-    }
-    return date ? format(date, "dd-MM-yyyy") : null;
+    const rawDate = Array.isArray(data) ? data[0] : data;
+    if ( !rawDate) return { birthdate: null };
+
+    const date = typeof rawDate === "string" ? parseISO(rawDate) : rawDate;
+    return isValid(date) ? format(date as Date, "dd-MM-yyyy") : null;
 };
 
 </script>
 
 <template>
-    <div class="rounded-lg shadow-md p-4 bg-white dark:bg-surface-800 relative w-full max-w-sm border dark:border-surface-700">
-        <!-- DNI y ícono delete -->
+    <div class="relative w-full cursor-pointer rounded-lg border bg-white p-4 shadow-md dark:bg-surface-800 dark:border-surface-700">
         <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-300">
             <div class="flex items-center gap-1">
                 <i-material-symbols-id-card-outline-rounded class="text-base"/>
-                <span>{{ props.dni }}</span>
+                <span>{{ props.doc_num }}</span>
             </div>
             <Button v-tooltip.left="'Eliminar de la lista'" size="small" severity="danger"
-                    @click="membersStoreOptions.removeMembers(props)">
+                    @click.stop.prevent="membersStoreOptions.removeMembers(props)">
                 <template #icon>
                     <i-material-symbols-delete-outline-rounded class="text-lg"/>
                 </template>
             </Button>
         </div>
 
-        <!-- Nombre -->
-        <h2 class="font-bold text-surface-900 dark:text-white text-base mt-1">
+        <h2 class="mt-1 text-base font-bold text-surface-900 dark:text-white">
             {{ props.names }} {{ props.lastnames }}
         </h2>
 
-        <!-- Género y Fecha -->
-        <div class="flex justify-between items-center mt-1 text-sm">
+        <div class="mt-1 flex items-center justify-between text-sm">
             <div class="flex items-center gap-1 text-primary-500">
                 <i-material-symbols-male-rounded class="text-base" v-if="props.gender === 'M'"/>
                 <i-material-symbols-female-rounded class="text-base" v-else/>
@@ -66,18 +62,18 @@ const convertDate = (data: Date | Date[] | (Date | null)[] | null | string | und
         </div>
 
         <!-- Teléfono y Estado -->
-        <div class="flex justify-between items-center mt-1 text-sm">
+        <div class="mt-1 flex items-center justify-between text-sm">
             <div class="flex items-center gap-1 text-gray-700 dark:text-gray-200">
                 <i-material-symbols-call class="text-base"/>
                 <span>{{ props.phone }}</span>
             </div>
-            <span class="text-primary-500 font-medium">{{ props.isMember }}</span>
+            <span class="font-medium text-primary-500">{{ storeKind().kind.find((ch) => ch.id === props.kind)?.description }}</span>
         </div>
 
         <!-- Iglesia -->
-        <div class="flex items-center gap-1 mt-1 text-sm text-gray-700 dark:text-gray-200">
+        <div class="mt-1 flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
             <i-material-symbols-church-rounded class="text-base"/>
-            <span>{{ props.church }}</span>
+            <span>{{ storeChurches().churches.find((ch) => ch.id === props.church)?.description }}</span>
         </div>
     </div>
 </template>

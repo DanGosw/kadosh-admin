@@ -1,13 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import type { InterfaceMembers } from "@/composables/interfaceMembers.ts";
-import toastEvent from "@/composables/toastEvent.ts";
+import type { InterfaceMembers } from "@/composables/interfaceMembers";
+import toastEvent from "@/composables/toastEvent";
+import routes from "@/router/index";
 
 export const useMembersStore = defineStore("membersStore", () => {
     const membersData = ref<InterfaceMembers[]>([]);
 
     const addNewMembers = (members: InterfaceMembers, resetFilters: () => void, isClickCard: boolean) => {
-        const index = membersData.value.findIndex(dt => dt.dni === members.dni);
+        const index = membersData.value.findIndex(dt => dt.doc_num === members.doc_num);
 
         if (index !== -1 && !isClickCard) {
             toastEvent({
@@ -34,11 +35,15 @@ export const useMembersStore = defineStore("membersStore", () => {
         }
     };
 
-    const removeMembers = (members: InterfaceMembers) => {
-        membersData.value = membersData.value.filter(dt => dt.dni !== members.dni);
+    const removeMembers = async(members: InterfaceMembers): Promise<void> => {
+        membersData.value = membersData.value.filter(dt => dt.doc_num !== members.doc_num);
         toastEvent({
             severity: "success", summary: "!Eliminado¡", message: `${ members.names } ${ members.lastnames } se eliminó de la lista`
         });
+        if (membersData.value.length === 0) {
+            toastEvent({ severity: "warn", summary: "!Error¡", message: `La lista esta vacía, agregue nuevos datos` });
+            await routes.push({ name: "suscribe" });
+        }
     };
 
     return { membersData, addNewMembers, removeMembers };

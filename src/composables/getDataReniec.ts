@@ -43,10 +43,13 @@ export const getDataReniec = useDebounceFn(async(consult: string): Promise<DataD
     if ( !isDNI && !isRUC) return handleError("Número inválido (Debe tener 8 o 11 dígitos)");
 
     try {
-        const { response } = await Api.Get({ route: `documents/${ consult }` });
+        const { response } = await Api.Get({ route: `person/apiclient/${ consult }` });
         const data = response.data;
 
         if ( !data.success) return handleError("No se encontró información.");
+        if (data.message && data.message.includes("existe")) {
+            return handleError(`${ data.message } y fue agregado a la lista`);
+        }
 
         if (isDNI) {
             toastEvent({ summary: "Éxito", message: "Datos encontrados", severity: "success" });
