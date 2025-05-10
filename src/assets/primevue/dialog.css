@@ -3,7 +3,7 @@
 .p-dialog {
     @apply max-h-[90%] scale-100 rounded-xl
     border-2 border-primary-500 dark:border-surface-700
-        /*bg-surface-0 dark:bg-surface-900*/
+        bg-surface-0 dark:bg-surface-900
     text-surface-700 dark:text-surface-100/90
     shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]
 }

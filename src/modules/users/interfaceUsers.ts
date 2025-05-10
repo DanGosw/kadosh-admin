@@ -5,7 +5,6 @@ export interface InterfaceUsers {
     names: string;
     email: string;
     lastname: string;
-    gender?: string;
     username: string;
     password?: string;
     passwordConfirm?: string;

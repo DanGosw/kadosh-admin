@@ -31,7 +31,7 @@ const { value: passwordConfirm, handleBlur: passwordConfirmHandleBlur } = useFie
 
 const saveChangePassword = handleSubmit(async(values) => {
     const { response }: UsersActiosMembersActions = await Api.Put({
-        route: `users/${ props.userID }/password`, data: { password: values.password }
+        route: `user/${ props.userID }/change_password`, data: { password: values.password, password2: values.passwordConfirm }
     });
     if (response && response.status === 200) {
         toast.add({ severity: "success", life: 5000, summary: "Contraseña actualizada correctamente" });

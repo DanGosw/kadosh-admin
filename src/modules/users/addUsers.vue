@@ -23,17 +23,17 @@ const schemaValidate = ref(yup.object({
         password: yup.string().trim().when("$isNew", {
             is: () => !props.formData?.id,
             otherwise: (schema) => schema.notRequired(),
-            then: (schema) => schema.required("Ingrese su contraseña").min(8, "Ingresa al menos 8 caracteres")
+            then: (schema) => schema.required("Ingrese su contraseña").min(5, "Ingresa al menos 5 caracteres")
         }).label("Contraseña"),
         passwordConfirm: yup.string().trim().when("$isNew", {
             is: () => !props.formData?.id,
-            then: (schema) => schema.required("Ingrese la confirmación").oneOf([ yup.ref("password") ], "La contraseña no coincide").min(8, "Ingresa al menos 8 caracteres"),
+            then: (schema) => schema.required("Ingrese la confirmación").oneOf([ yup.ref("password") ], "La contraseña no coincide").min(5, "Ingresa al menos 5 caracteres"),
             otherwise: (schema) => schema.notRequired()
         }).label("Confirm. Contraseña"),
         profile: yup.string().trim().required("Seleccione un perfil").label("Perfil"),
         username: yup.string().trim().when("$isNew", {
             is: () => !props.formData?.id,
-            then: (schema) => schema.required("Ingrese su usuario").min(8, "Ingresa al menos 8 caracteres"),
+            then: (schema) => schema.required("Ingrese su usuario").min(5, "Ingresa al menos 8 caracteres"),
             otherwise: (schema) => schema.notRequired()
         }).label("Usuario")
     })
@@ -48,14 +48,8 @@ const fields = ref<InterfaceUsers>({
     passwordConfirm: "",
     profile: null,
     username: "",
-    gender: "",
     lastname: ""
 });
-
-const gendersOptions = ref([
-    { label: "Masculino", value: "M" },
-    { label: "Femenino", value: "F" }
-]);
 
 /**
  * add initial values to form, get methods to validate form
@@ -67,7 +61,6 @@ const { handleSubmit, resetForm, errors, setValues } = useForm({ validationSchem
  */
 const { value: names, handleBlur: namesBlur } = useField<string>("names");
 const { value: email } = useField<string>("email");
-const { value: gender } = useField<string>("gender");
 const { value: profile, handleBlur: profileBlur } = useField<string>("profile");
 const { value: username, handleBlur: usernameBlur } = useField<string>("username");
 const { value: lastname } = useField<string>("lastname");
@@ -90,15 +83,15 @@ const onSubmit = handleSubmit(async(values) => {
         delete values.password;
         delete values.passwordConfirm;
         const { response }: UsersActiosMembersActions = await Api.Put({ route: `user/${ props.formData?.id }`, data: { ...values } });
-        if (response.status === 200) {
-            toast.add({ life: 5000, closable: true, summary: "", severity: "success" });
+        if (response.status === 201) {
+            toast.add({ life: 5000, closable: true, summary: `${ response.data.names } actualizado`, severity: "success" });
             reloadData();
         }
     } else {
         const { response }: UsersActiosMembersActions = await Api.Post({ route: `user`, data: { ...values } });
         if (response.status === 201) {
             reloadData();
-            toast.add({ life: 5000, closable: true, summary: "", severity: "success" });
+            toast.add({ life: 5000, closable: true, summary: "xxx", severity: "success" });
         }
     }
 }, ({ errors }) => {
@@ -135,10 +128,7 @@ onMounted(async() => {
         <form-item for-label="lastname" label="Apellidos" cols="6">
             <InputText v-model="lastname" id="lastname" fluid autocomplete="off"/>
         </form-item>
-        <form-item for-label="gender" label="Genero" cols="3">
-            <Select v-model="gender" id="gender" fluid :options="gendersOptions" option-label="label" option-value="value"/>
-        </form-item>
-        <form-item for-label="email" label="Correo" cols="5">
+        <form-item for-label="email" label="Correo" cols="6">
             <InputText v-model="email" id="email" fluid autocomplete="off"/>
         </form-item>
         <form-item for-label="profile" label="Perfil" cols="4" mark :error="errors.profile">
@@ -147,7 +137,7 @@ onMounted(async() => {
         </form-item>
         <form-item v-if="!props.formData?.id" for-label="username" label="Usuario" mark :error="errors.username" cols="4">
             <InputText v-model="username" id="username" :invalid="!!errors.username" fluid @blur="usernameBlur($event, true)"
-                       autocomplete="off"/>
+                       max="11" autocomplete="off"/>
         </form-item>
         <form-item v-if="!props.formData?.id" for-label="password" label="Contraseña" mark :error="errors.password" cols="4">
             <Password v-model="password" input-id="password" :invalid="!!errors.password" class="w-full" :toggleMask="true"

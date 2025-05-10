@@ -37,6 +37,7 @@ const router = createRouter({
                     path: "/users", name: "users", component: () => import("@/modules/users/users.vue"),
                     meta: {
                         label: "Usuarios", icon: IconSolarUsersGroupRoundedBold,
+                        superOnly: true,
                         permissions: [
                             { name: "XD2" }
                         ]
@@ -75,7 +76,7 @@ router.beforeEach(async(to, _, next) => {
     }
 
     // Usuario superusuario → acceso total
-    if (useAuthStore.userData?.user?.is_superuser) {
+    if (useAuthStore.userData?.user?.profile_description === 'ADMINISTRADOR') {
         return next();
     }
 

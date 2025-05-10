@@ -17,7 +17,8 @@ export interface User {
     gender: string
     is_staff: boolean
     is_active: boolean
-    profile: any
+    profile: number
+    profile_description: string
     groups: any[]
     user_permissions: any[]
 }

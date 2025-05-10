@@ -13,7 +13,7 @@ interface Fields {
 }
 
 const { loginUserData } = useUserDataConfigStore();
-const fields = ref<Fields>({ username: "ADMIN", password: "admin" });
+const fields = ref<Fields>({ username: "", password: "" });
 const toast = useToast();
 const refPassword = ref();
 
@@ -58,6 +58,7 @@ const focusPassword = () => refPassword.value.$el.querySelector("input").focus()
 
                 <form-item for-label="username" label="Usuario" mark :error="usernameError">
                     <InputText v-model="username" fluid placeholder="Ingrese su usuario" id="username" autofocus
+                               @update:model-value="(value: string | undefined) => username = value?.toUpperCase() || ''"
                                @blur="usernameBlur($event, true)" :invalid="!!errors.username" @keyup.enter="focusPassword"/>
                 </form-item>
 

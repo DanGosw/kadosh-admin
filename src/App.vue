@@ -43,5 +43,6 @@ onMounted(async() => {
     <div v-else>
         <router-view/>
         <Toast position="top-left"/>
+        <ConfirmDialog/>
     </div>
 </template>

@@ -26,7 +26,7 @@ const addValueParameters = () => {
     parameters.value = {
         visible: true,
         header: "Nuevo Usuario",
-        width: "70vw",
+        width: "50vw",
         component: componentAddBranchModal
     };
 };

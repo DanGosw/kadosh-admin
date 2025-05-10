@@ -62,7 +62,7 @@ const addParametersUserModal = (data: InterfaceUsers): void => {
         footer: "",
         header: "Editar usuario",
         visible: true,
-        width: "75vw"
+        width: "55vw"
     };
 };
 
@@ -103,7 +103,7 @@ defineExpose({ loadUserList });
         <Column style="width: 10%" field="username" header="Usuario"/>
         <Column style="width: 10%" field="names" header="Nombres"/>
         <Column style="width: 10%" field="email" header="Correo"/>
-        <Column style="width: 10%" field="profile" header="Perfil"/>
+        <Column style="width: 10%" field="profile_description" header="Perfil"/>
         <Column style="width: 5%" header="Estado" field="is_active">
             <template #body="{data}">
                 <Message size="small" :severity="data.is_active? 'success' : 'error'">

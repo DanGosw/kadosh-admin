@@ -5,10 +5,13 @@ import AppConfig from "@/components/app/appConfig.vue";
 import { optionsMenuStore } from "@/stores/optionsMenu";
 import type { MenuItem } from "primevue/menuitem";
 import { useUserDataConfigStore } from "@/stores/loginStore/storeUserData.ts";
+import { useConfirm } from "primevue";
+import toastEvent from "@/composables/toastEvent.ts";
 
 const route = useRoute();
 const router = useRouter();
 const userDataStore = useUserDataConfigStore();
+const confirm = useConfirm();
 
 optionsMenuStore.createOptionsMenu();
 
@@ -34,6 +37,28 @@ const handleNavigation = (route: string | { name: string }): void => {
     } else {
         console.warn("Invalid route:", route);
     }
+};
+
+const confirm1 = () => {
+    confirm.require({
+        message: "¿Estas seguro de cerrar sesión?",
+        header: "Confirmación",
+        rejectProps: {
+            label: "Cancelar",
+            severity: "secondary",
+            outlined: true
+        },
+        acceptProps: {
+            label: "Cerrar"
+        },
+        accept: () => {
+            userDataStore.logout();
+            toastEvent({ severity: "info", summary: "Sesión expirada", message: "Vuelva a iniciar sesión", life: 3000 });
+        },
+        reject: () => {
+            toastEvent({ severity: "error", summary: "Cancelado", message: "No se cerro la sesión", life: 3000 });
+        }
+    });
 };
 
 </script>
@@ -69,7 +94,7 @@ const handleNavigation = (route: string | { name: string }): void => {
 
         <template #end>
             <div class="flex space-x-1">
-                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="userDataStore.logout()"
+                <Button size="small" severity="secondary" class="!w-8 !h-8" @click="confirm1"
                         v-tooltip.bottom="'Cerrar Sesión'">
                     <template #icon>
                         <i-material-symbols-person-outline-rounded/>
